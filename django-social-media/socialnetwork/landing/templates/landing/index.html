@@ -1,0 +1,39 @@
+{% extends "landing/base.html" %}
+{% block content %}
+{% if user.is_authenticated %}
+    {% for post in posts %}
+      {% if post.user in friends %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ post.user.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'user-post' post.user.username%}">{{ post.user }}</a>
+              <small class="text-muted">{{ post.date_posted }}</small>
+            </div>
+            <p class="article-content">{{ post.content }}</p>
+            {% if post.image %}
+              <img class="rounded img-fluid" src="{{ post.image.url }}" alt="post image">
+            {% endif %}
+            </div>
+        </article>
+      
+      {% elif post.user in me %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ post.user.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'user-post' post.user.username%}">{{ post.user }}</a>
+              <small class="text-muted">{{ post.date_posted }}</small>
+            </div>
+            <p class="article-content">{{ post.content }}</p>
+            {% if post.image %}
+              <img class="rounded img-fluid" src="{{ post.image.url }}" alt="post image">
+            {% endif %}
+            </div>
+        </article>
+      {% endif %}
+    {% endfor %}
+{% else %}
+    <h1>Welcome to Django Blog!</h1>
+{% endif %}
+{% endblock content %}

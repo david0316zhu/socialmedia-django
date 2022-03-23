@@ -1,0 +1,39 @@
+{% extends "landing/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    </div>
+    <div class="content-section">
+        <div class="media">
+            <img class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+            <div class="media-body">
+                <h2 class="account-heading">{{ user.username }}</h2>
+                <p class="text-secondary">{{ user.email }}</p>
+            </div>
+        </div>
+        <form method="POST" enctype="multipart/form-data">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-5">Profile information</legend>
+                {{ update_form| crispy }}
+                {{ profile_form| crispy }}
+            </fieldset>
+            <div class="form-group">
+                <button class="btn btn-outline-info" type="submit">
+                    Update
+                </button>
+            </div>
+        </form>
+    </div>
+    <div class="container col-md-4">
+        <div class="content-section">
+        <h3>Friends</h3>
+        <p>Number of friends: {{count}}
+            <ul class="list-group">
+                {% for friend in friends %}
+                    <li class="list-group-item list-group-item-light"><a class="mr-2" href="{% url 'user-post' friend%}">{{ friend }}</a></li>
+                {% endfor %}
+            </ul>
+        </p>
+        </div>
+    </div>
+{% endblock content %}

@@ -1,0 +1,16 @@
+{% extends "landing/base.html" %}
+{% block content %}
+<h2 class="mb-3">Search Result(s)</h2>
+    {% if is_null %}
+        <h3>No invitations</h3>
+    {% elif not is_null %}
+    <ul class="list-group">
+        {% for res in results %}
+        <li class="list-group-item list-group-item-light"><img class="rounded-circle account-img" style="
+            height:50px;
+            width: 50px; margin-top: 5px; float:left"src="{{ res.user.profile.image.url }}"><a class="mr-2" href="{% url 'user-post' res.user%}" style="float:left; margin-top: 20px;">{{ res.user }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {%endif%}
+{% endblock content %}

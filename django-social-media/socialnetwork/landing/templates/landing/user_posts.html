@@ -1,0 +1,51 @@
+{% extends "landing/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+{% if not me%}
+<div style="
+position: absolute;
+right: -400px;
+margin-left: 100px;">
+  
+    {% if friend %}
+    <button type="button" class="btn btn-info" style="height: 40px; width: 80px; float: right; margin-top: 10px;">
+    <span>Friend</span>
+    </button>
+    <form action="{% url 'remove-friend' %}" method="POST">
+      {% csrf_token %}
+      <input type="hidden" name="profile_pk" value={{target.pk}}>
+      <button type="submit" class="btn btn-danger" style="height: 40px; width: 80px; float: right; margin-top: 10px;">Remove</button>
+    </form>
+    {% elif request.user not in target.friends.all %}
+      {% if target.user in relation_receiver and request.user not in target.friends.all %}
+        <button class="btn btn-info"><i class="user icon"></i>Pending Request</button>
+      {% else %} 
+      <form action="{% url 'friend-request' %}" method="POST">
+        {% csrf_token %}
+        <input type="hidden" name="profile_pk" value={{target.pk}}>
+        <button type="submit" class="btn btn-info"><i class="plus square icon"></i>Send Friend Request</button>
+      </form>
+      {% endif %} 
+    {% endif %} 
+     
+</div>
+{% endif %}
+
+<h2 class="mb-3">Posts By {{ view.kwargs.username }} </h2>
+    {% for post in posts %}
+        <article class="media content-section">
+          <img class="rounded-circle article-img" src="{{ post.user.profile.image.url }}">
+          <div class="media-body">
+            <div class="article-metadata">
+              <a class="mr-2" href="{% url 'user-post' post.user.username%}">{{ post.user }}</a>
+              <small class="text-muted">{{ post.date_posted }}</small>
+            </div>
+            <p class="article-content">{{ post.content }}</p>
+            {% if post.image %}
+              <img class="rounded img-fluid" src="{{ post.image.url }}" alt="post image">
+            {% endif %}
+          </div>
+        </article>
+    {% endfor %}
+    
+{% endblock content %}
